@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 02, 2026 at 06:01 PM
+-- Generation Time: Jan 02, 2026 at 06:00 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -20,31 +20,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `sarasavi_db`
 --
-
--- --------------------------------------------------------
-
---
--- Table structure for table `books`
---
-
-CREATE TABLE `books` (
-  `b_id` int(20) NOT NULL,
-  `name` varchar(20) NOT NULL,
-  `author` varchar(20) NOT NULL,
-  `category` varchar(20) NOT NULL,
-  `language` varchar(20) NOT NULL,
-  `regdate` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `books`
---
-
-INSERT INTO `books` (`b_id`, `name`, `author`, `category`, `language`, `regdate`) VALUES
-(1, 'c programming', 'david', 'computing', 'english', '2026-01-02 22:02:34'),
-(2, 'biology', 'silva', 'science', 'english', '2026-01-02 22:25:47'),
-(3, 'maths', 'silva', 'mathematics', 'english', '2026-01-02 22:27:55'),
-(4, 'sinhala', 'silva', 'other', 'sinhala', '2026-01-02 22:28:53');
 
 -- --------------------------------------------------------
 
@@ -71,12 +46,6 @@ INSERT INTO `bookstock` (`s_id`, `b_id`, `copies`) VALUES
 --
 
 --
--- Indexes for table `books`
---
-ALTER TABLE `books`
-  ADD PRIMARY KEY (`b_id`);
-
---
 -- Indexes for table `bookstock`
 --
 ALTER TABLE `bookstock`
@@ -86,12 +55,6 @@ ALTER TABLE `bookstock`
 --
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `books`
---
-ALTER TABLE `books`
-  MODIFY `b_id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `bookstock`
