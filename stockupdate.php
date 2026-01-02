@@ -1,3 +1,9 @@
+<?php
+
+include 'database.php';
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,3 +29,26 @@
 </body>
 </html>
 
+<?php
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $bid = $_POST['bid'];
+    $copies = $_POST['copies'];
+  
+
+    if (empty($bid) || empty($copies)) {
+        echo "All fields are required.";
+        exit;
+    
+    } else {
+    
+        $sql = "INSERT INTO bookstock (b_id, copies) VALUES ('$bid', '$copies')";
+
+        mysqli_query($conn, $sql);
+        header("Location: dashboard.php");
+    }
+
+    mysqli_close($conn);
+
+}
+?>
