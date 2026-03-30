@@ -31,7 +31,7 @@
     <div class="home-container">
         <!-- <h1 class="home-title">Welcome, <?php echo htmlspecialchars($admin_name); ?>!</h1>                            -->
         <p class="home-text">Manage books, track borrow requests, and oversee library users.</p>
-        <a href="books.php" class="btn">View Books</a>
+        <a href="books.php#view_book" class="btn">View Books</a>
         <a href="#requests" class="btn">Borrow Requests</a>
         <a href="#history" class="btn">Borrow History</a>
     </div>
