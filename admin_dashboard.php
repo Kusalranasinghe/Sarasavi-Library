@@ -1,13 +1,12 @@
 <?php
-session_start(); 
+session_start();
 
-//if(!isset($_SESSION['admin_name'])){
- //   header("Location: login.php");
-  //  exit();
-//}
+if(!isset($_SESSION['admin_name'])){
+    header("Location: login.php");
+    exit();
+}
 
 $admin_name = $_SESSION['admin_name'];
-
 include 'includes/database.php';
 ?>
 
@@ -47,7 +46,7 @@ include 'includes/database.php';
         <p class="home-text">Manage books, track borrow requests, and oversee library users.</p>
         <a href="books.php#view_book" class="btn">View Books</a>
         <a href="#requests" class="btn">Borrow Requests</a>
-        <a href="#history" class="btn">Borrow History</a>
+        <a href="#user_requests" class="btn">User Requests</a>
     </div>
 </section>
 

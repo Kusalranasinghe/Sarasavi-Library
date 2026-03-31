@@ -1,12 +1,14 @@
 <?php
-include 'includes/database.php'; 
 session_start();
+include 'includes/database.php';
 
-// Only admin can access
-//if(!isset($_SESSION['user_id']) || $_SESSION['role'] == 'user'){
- //   header("Location: login.php");
- //   exit;
-//} 
+// Only admin or super_admin can access
+if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'super_admin'])) {
+    header("Location: login.php");
+    exit;
+}
+
+$role = $_SESSION['role']; // safe to use now
 ?>
 
 <!DOCTYPE html>
@@ -34,12 +36,11 @@ session_start();
     </nav>
 </header>
 
-
+<!-- View Users -->
 <section id="view_users">
     <div class="books-section">
         <h2>Users List</h2>
         <hr>
-
         <table class="books-table">
             <thead>
                 <tr>
@@ -73,7 +74,7 @@ session_start();
     </div>
 </section>
 
-<!-- VIEW USER CARD -->
+<!-- View User Card -->
 <?php
 if(isset($_GET['user_id'])){
     $user_id = intval($_GET['user_id']);
@@ -81,7 +82,7 @@ if(isset($_GET['user_id'])){
     $result = mysqli_query($conn, $query);
 
     if($user = mysqli_fetch_assoc($result)){
-        $readonly = ($user['role'] != 'user') ? true : false;
+        $readonly = ($user['role'] != 'user'); // Admin / Super Admin are readonly
 ?>
 <div class="book-card-overlay">
     <div class="book-card">
@@ -107,14 +108,12 @@ if(isset($_GET['user_id'])){
         <?php } else { ?>
         <p class="readonly-note">Admin and Super Admin info cannot be changed.</p>
         <?php } ?>
-
     </div>
 </div>
 <?php
     }
 }
 ?>
-
 
 <!-- Add User Section -->
 <section id="add_user">
@@ -123,23 +122,21 @@ if(isset($_GET['user_id'])){
         <hr>
 
         <?php
-        // Handle form submission
         if(isset($_POST['add_user'])){
             $name = mysqli_real_escape_string($conn, $_POST['name']);
             $email = mysqli_real_escape_string($conn, $_POST['email']);
             $phone = mysqli_real_escape_string($conn, $_POST['phone']);
             $nic = mysqli_real_escape_string($conn, $_POST['nic']);
             $address = mysqli_real_escape_string($conn, $_POST['address']);
-            $role = mysqli_real_escape_string($conn, $_POST['role']);
+            $role_post = mysqli_real_escape_string($conn, $_POST['role']);
             $password = mysqli_real_escape_string($conn, $_POST['password']);
-            $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-            // Prevent creating Admin/Super Admin accidentally
-            if($role != 'user' && $_SESSION['role'] != 'super_admin'){
+            // Only super_admin can create admin or super_admin
+            if(in_array($role_post, ['admin','super_admin']) && $_SESSION['role'] != 'super_admin'){
                 echo "<p class='error-msg'>Only Super Admin can create Admin or Super Admin.</p>";
             } else {
-                $insert = "INSERT INTO users (name,email,phone,nic,address,role,password,created_at,updated_at)
-                           VALUES ('$name','$email','$phone','$nic','$address','$role','$hashed_password',NOW(),NOW())";
+                $insert = "INSERT INTO users (name,email,phone,nic,address,role,password,created_at,updated_at,status)
+                           VALUES ('$name','$email','$phone','$nic','$address','$role_post','$password',NOW(),NOW(),'approved')";
 
                 if(mysqli_query($conn, $insert)){
                     echo "<p class='success-msg'>User added successfully!</p>";
@@ -160,8 +157,8 @@ if(isset($_GET['user_id'])){
             <select name="role" required>
                 <option value="user">User</option>
                 <?php if($_SESSION['role'] == 'super_admin'){ ?>
-                <option value="admin">Admin</option>
-                <option value="super_admin">Super Admin</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_admin">Super Admin</option>
                 <?php } ?>
             </select>
 

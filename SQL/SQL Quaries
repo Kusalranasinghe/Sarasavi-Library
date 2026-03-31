@@ -18,10 +18,6 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
-INSERT INTO users (name, email, password, phone, nic, address, role, status) VALUES
-('Super Admin', 'superadmin@sarasavi.com', 'super123$', '0771234567', '123456789V', 'Colombo', 'super_admin', 'approved'),
-('Admin User', 'admin@sarasavi.com', 'admin123$', '0772345678', '987654321V', 'Galle', 'admin', 'approved'),
-('Sathira Pending', 'spending@example.com', 'spending123$', '0774567890', '741258963V', 'Panadura', 'user', 'pending');
 
 
 
