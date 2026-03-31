@@ -1,3 +1,16 @@
+<?php
+session_start(); 
+
+//if(!isset($_SESSION['admin_name'])){
+ //   header("Location: login.php");
+  //  exit();
+//}
+
+$admin_name = $_SESSION['admin_name'];
+
+include 'includes/database.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -14,8 +27,9 @@
     <a href="admin_dashboard.php" class="logo">Sarasavi Library</a>
     <i class='bx bx-menu' id="menu-icon"></i>
     <nav class="navbar">
-        <a href="#home">Dashboard</a>
+        <a href="#user_requests">User Requests</a>
         <a href="#requests">Borrow Requests</a>
+        <a href="#user_history">User History</a>
         <a href="#history">History</a>
         <a href="books.php">Books</a>
         <a href="users.php">Users</a>  
@@ -29,7 +43,7 @@
 <!-- Home Section -->
 <section id="home">
     <div class="home-container">
-        <!-- <h1 class="home-title">Welcome, <?php echo htmlspecialchars($admin_name); ?>!</h1>                            -->
+        <h1 class="home-title">Welcome, <?php echo htmlspecialchars($admin_name); ?>!</h1>                        
         <p class="home-text">Manage books, track borrow requests, and oversee library users.</p>
         <a href="books.php#view_book" class="btn">View Books</a>
         <a href="#requests" class="btn">Borrow Requests</a>
@@ -37,9 +51,19 @@
     </div>
 </section>
 
+<!-- User Requests Section -->
+<section id="user_requests">
+    <?php include 'includes/user_requests.php'; ?>
+</section>
+
 <!-- Requests Section -->
 <section id="requests">
     <?php include 'includes/requests.php'; ?>
+</section>
+
+<!-- User Requests History Section -->
+<section id="user_history">
+    <?php include 'includes/user_history.php'; ?>
 </section>
 
 <!-- History Section -->

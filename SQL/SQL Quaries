@@ -1,85 +1,61 @@
-CREATE DATABASE IF NOT EXISTS sarasavi_db;
+CREATE DATABASE sarasavi_db;
+
 USE sarasavi_db;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
 
-CREATE TABLE `books` (
-  `b_id` int(20) NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) NOT NULL,
-  `author` varchar(100) NOT NULL,
-  `cover_image` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`b_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO `books` (`title`, `author`, `cover_image`) VALUES
-('The Great Gatsby', 'F. Scott Fitzgerald', 'covers/gatsby.jpg'),
-('1984', 'George Orwell', 'covers/1984.jpg'),
-('To Kill a Mockingbird', 'Harper Lee', 'covers/mockingbird.jpg'),
-('Pride and Prejudice', 'Jane Austen', 'covers/pride.jpg'),
-('The Hobbit', 'J.R.R. Tolkien', 'covers/hobbit.jpg');
-
-
-CREATE TABLE `users` (
-  `user_id` int(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL UNIQUE,
-  `password` varchar(255) NOT NULL,
-  `phone` varchar(20),
-  `nic` varchar(20) UNIQUE,
-  `address` text,
-  `role` enum('admin','super_admin','user') NOT NULL DEFAULT 'user',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-INSERT INTO `users` (`name`, `email`, `password`, `phone`, `nic`, `address`, `role`) VALUES
-('Super Admin', 'superadmin@sarasavi.com', 'super123', '0771234567', '123456789V', 'Colombo', 'super_admin'),
-('Admin User', 'admin@sarasavi.com', 'admin123', '0772345678', '987654321V', 'Galle', 'admin'),
-('Library Staff', 'staff@sarasavi.com', 'staff123', '0773456789', '456789123V', 'Kalutara', 'user'),
-('John Doe', 'john@example.com', 'john123', '0774567890', '741258963V', 'Panadura', 'user'),
-('Jane Smith', 'jane@example.com', 'jane123', '0775678901', '852369741V', 'Matara', 'user');
+CREATE TABLE users (
+    user_id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    phone VARCHAR(20),
+    nic VARCHAR(20) UNIQUE,
+    address TEXT,
+    role ENUM('user','admin','super_admin') DEFAULT 'user',
+    status ENUM('pending','approved','rejected') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+INSERT INTO users (name, email, password, phone, nic, address, role, status) VALUES
+('Super Admin', 'superadmin@sarasavi.com', 'super123$', '0771234567', '123456789V', 'Colombo', 'super_admin', 'approved'),
+('Admin User', 'admin@sarasavi.com', 'admin123$', '0772345678', '987654321V', 'Galle', 'admin', 'approved'),
+('Sathira Pending', 'spending@example.com', 'spending123$', '0774567890', '741258963V', 'Panadura', 'user', 'pending');
 
 
-CREATE TABLE `bookstock` (
-  `s_id` int(20) NOT NULL AUTO_INCREMENT,
-  `b_id` int(20) NOT NULL,
-  `copies` int(20) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`s_id`),
-  FOREIGN KEY (`b_id`) REFERENCES `books`(`b_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-INSERT INTO `bookstock` (`b_id`, `copies`) VALUES
-(1, 10),
-(2, 8),
-(3, 12),
-(4, 7),
-(5, 15);
+CREATE TABLE books (
+    b_id INT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(100) NOT NULL,
+    cover_image VARCHAR(255)
+);
 
 
-CREATE TABLE `borrows` (
-  `borrow_id` int(20) NOT NULL AUTO_INCREMENT,
-  `b_id` int(20) NOT NULL,
-  `user_id` int(20) NOT NULL,
-  `borrow_date` date NOT NULL,
-  `return_date` date NOT NULL,
-  `status` enum('pending','approved','declined') DEFAULT 'pending',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  PRIMARY KEY (`borrow_id`),
-  FOREIGN KEY (`b_id`) REFERENCES `books`(`b_id`) ON DELETE CASCADE,
-  FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE bookstock (
+    s_id INT AUTO_INCREMENT PRIMARY KEY,
+    b_id INT NOT NULL,
+    copies INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (b_id) REFERENCES books(b_id) ON DELETE CASCADE
+);
 
 
-INSERT INTO `borrows` (`b_id`, `user_id`, `borrow_date`, `return_date`, `status`) VALUES
-(1, 4, '2026-03-01', '2026-03-10', 'approved'),
-(3, 5, '2026-03-05', '2026-03-15', 'pending'),
-(2, 4, '2026-03-10', '2026-03-20', 'approved'),
-(5, 5, '2026-03-12', '2026-03-22', 'declined'),
-(4, 4, '2026-03-15', '2026-03-25', 'pending');
+
+CREATE TABLE borrows (
+    borrow_id INT AUTO_INCREMENT PRIMARY KEY,
+    b_id INT NOT NULL,
+    user_id INT NOT NULL,
+    borrow_date DATE NOT NULL,
+    return_date DATE NOT NULL,
+    status ENUM('pending','approved','declined') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (b_id) REFERENCES books(b_id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
 
 SET FOREIGN_KEY_CHECKS = 1;
