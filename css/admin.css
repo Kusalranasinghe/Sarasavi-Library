@@ -140,13 +140,25 @@ hr {
 /* history and requests section */
 #requests {
     padding: 80px 20px;
-    background-color: #e9ecef; 
+    background-color: #f8f9fa;
     text-align: center;
     min-height: 90vh;
 }
 #history {
     padding: 80px 20px;
-    background-color: #f8f9fa;
+    background-color: #f8f9fa; 
+    text-align: center;
+    min-height: 90vh;
+}
+#user_requests {
+    padding: 80px 20px;
+    background-color: #e9ecef;
+    text-align: center;
+    min-height: 90vh;
+}
+#user_history {
+    padding: 80px 20px;
+    background-color: #e9ecef;
     text-align: center;
     min-height: 90vh;
 }
@@ -157,6 +169,12 @@ hr {
     font-weight: 600;
 }
 #history h2 {
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: 600;
+}
+#user_requests h2 {
     color: #007bff;
     margin-bottom: 20px;
     font-size: 28px;

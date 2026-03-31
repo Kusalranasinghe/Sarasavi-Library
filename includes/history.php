@@ -1,5 +1,5 @@
 <?php
-include 'includes/database.php'; // Your DB connection
+include 'includes/database.php';
 
 // Fetch all borrow records
 $query = "SELECT borrows.borrow_id, books.title, users.name AS user_name, borrows.borrow_date, borrows.return_date, borrows.status

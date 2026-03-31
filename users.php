@@ -51,7 +51,7 @@ session_start();
             </thead>
             <tbody>
             <?php
-            $query = "SELECT * FROM users";
+            $query = "SELECT * FROM users WHERE status='approved' AND role IN ('user','admin','super_admin')";
             $result = mysqli_query($conn, $query);
 
             while($user = mysqli_fetch_assoc($result)){
