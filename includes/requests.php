@@ -1,17 +1,18 @@
 <?php
 include 'includes/database.php'; // Your DB connection
 
-// Fetch all borrow records
-$query = "SELECT borrows.borrow_id, books.title, users.name AS user_name, borrows.borrow_date, borrows.return_date, borrows.status
+// Fetch pending borrow requests
+$query = "SELECT borrows.borrow_id, books.title, users.name AS user_name, borrows.borrow_date, borrows.return_date
           FROM borrows
           JOIN books ON borrows.b_id = books.b_id
           JOIN users ON borrows.user_id = users.user_id
-          ORDER BY borrows.borrow_date DESC";
+          WHERE borrows.status = 'pending'
+          ORDER BY borrows.borrow_date ASC";
 $result = $conn->query($query);
 ?>
 
 <div class="books-section">
-    <h2>Borrow History</h2><hr>
+    <h2>Pending Borrow Requests</h2><hr>
     <table class="books-table">
         <thead>
             <tr>
@@ -20,7 +21,7 @@ $result = $conn->query($query);
                 <th>User</th>
                 <th>Borrow Date</th>
                 <th>Return Date</th>
-                <th>Status</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -33,11 +34,14 @@ $result = $conn->query($query);
                     <td><?php echo htmlspecialchars($row['user_name']); ?></td>
                     <td><?php echo $row['borrow_date']; ?></td>
                     <td><?php echo $row['return_date']; ?></td>
-                    <td><?php echo ucfirst($row['status']); ?></td>
+                    <td>
+                        <a href="includes/update_request.php?id=<?php echo $row['borrow_id']; ?>&action=approve" class="edit-btn">Approve</a>
+                        <a href="includes/update_request.php?id=<?php echo $row['borrow_id']; ?>&action=decline" class="delete-btn">Decline</a>
+                    </td>
                 </tr>
             <?php endwhile; else: ?>
                 <tr>
-                    <td colspan="6">No borrow history found.</td>
+                    <td colspan="6">No pending requests.</td>
                 </tr>
             <?php endif; ?>
         </tbody>

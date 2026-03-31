@@ -21,8 +21,8 @@
         <div class="footer-col">
             <h2>Quick Links</h2>
             <ul>
-                <li><a href="privacy.php">Privacy Policy</a></li>
-                <li><a href="terms.php">Terms of Service</a></li>
+                <li><a href="includes/privacy.php">Privacy Policy</a></li>
+                <li><a href="includes/terms.php">Terms of Service</a></li>
             </ul>
         </div>
 

@@ -142,11 +142,13 @@ hr {
     padding: 80px 20px;
     background-color: #e9ecef; 
     text-align: center;
+    min-height: 90vh;
 }
 #history {
     padding: 80px 20px;
     background-color: #f8f9fa;
     text-align: center;
+    min-height: 90vh;
 }
 #requests h2 {
     color: #007bff;
@@ -474,4 +476,76 @@ section {
     .footer-col { 
         margin-bottom: 20px; 
     }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.books-table a.edit-btn,
+.books-table a.delete-btn {
+    display: inline-block;      /* Make link behave like a button */
+    padding: 6px 12px;          /* Button padding */
+    margin: 0 3px;              /* Small spacing between buttons */
+    border-radius: 5px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.books-table a.edit-btn {
+    background: #28a745;
+}
+.books-table a.edit-btn:hover {
+    background: #218838;
+    transform: translateY(-1px);
+}
+
+.books-table a.delete-btn {
+    background: #dc3545;
+}
+.books-table a.delete-btn:hover {
+    background: #c82333;
+    transform: translateY(-1px);
+}
+.books-table td a {
+    display: block;
+    margin: 5px auto;
 }
