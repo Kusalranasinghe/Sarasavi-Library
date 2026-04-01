@@ -1,12 +1,20 @@
 <?php
 session_start();
 
-if(!isset($_SESSION['admin_name'])){
+if(!isset($_SESSION['user'])){
     header("Location: login.php");
     exit();
 }
 
-$admin_name = $_SESSION['admin_name'];
+$role = $_SESSION['user']['role'];
+
+// Only admin & super admin allowed
+if($role != 'admin' && $role != 'super_admin'){
+    header("Location: user_dashboard.php");
+    exit();
+}
+
+$admin_name = $_SESSION['user']['name'];
 include 'includes/database.php';
 ?>
 

@@ -1,5 +1,20 @@
 <?php
-include 'includes/database.php'; 
+session_start();
+include 'includes/database.php';
+
+// Check login
+if(!isset($_SESSION['user'])){
+    header("Location: login.php");
+    exit();
+}
+
+// Check role
+$role = $_SESSION['user']['role'];
+
+if($role != 'admin' && $role != 'super_admin'){
+    header("Location: user_dashboard.php");
+    exit();
+}
 ?>
 
 <!DOCTYPE html>

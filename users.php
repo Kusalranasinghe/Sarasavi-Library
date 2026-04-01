@@ -2,13 +2,19 @@
 session_start();
 include 'includes/database.php';
 
-// Only admin or super_admin can access
-if (!isset($_SESSION['role']) || !in_array($_SESSION['role'], ['admin', 'super_admin'])) {
-    header("Location: login.php");
-    exit;
-}
+// Check login 
+if (!isset($_SESSION['user'])) { 
+    header("Location: login.php"); 
+    exit; 
+} 
 
-$role = $_SESSION['role']; // safe to use now
+$role = $_SESSION['user']['role']; 
+
+// Only admin & super_admin 
+if (!in_array($role, ['admin', 'super_admin'])) { 
+    header("Location: user_dashboard.php"); 
+    exit; 
+} 
 ?>
 
 <!DOCTYPE html>
@@ -61,9 +67,9 @@ $role = $_SESSION['role']; // safe to use now
                 echo "<td>{$user['name']}</td>";
                 echo "<td>{$user['role']}</td>";
                 echo "<td>
-                        <form method='GET' action='users.php'>
-                            <input type='hidden' name='user_id' value='{$user['user_id']}'>
-                            <button type='submit'>View Info</button>
+                        <form method='GET'> 
+                        <input type='hidden' name='user_id' value='{$user['user_id']}'> 
+                        <button>View</button> 
                         </form>
                       </td>";
                 echo "</tr>";
@@ -132,7 +138,7 @@ if(isset($_GET['user_id'])){
             $password = mysqli_real_escape_string($conn, $_POST['password']);
 
             // Only super_admin can create admin or super_admin
-            if(in_array($role_post, ['admin','super_admin']) && $_SESSION['role'] != 'super_admin'){
+            if(in_array($role_post, ['admin','super_admin']) && $_SESSION['user']['role'] != 'super_admin'){
                 echo "<p class='error-msg'>Only Super Admin can create Admin or Super Admin.</p>";
             } else {
                 $insert = "INSERT INTO users (name,email,phone,nic,address,role,password,created_at,updated_at,status)
@@ -156,7 +162,7 @@ if(isset($_GET['user_id'])){
             <input type="password" name="password" placeholder="Password" required>
             <select name="role" required>
                 <option value="user">User</option>
-                <?php if($_SESSION['role'] == 'super_admin'){ ?>
+                <?php if($_SESSION['user']['role'] == 'super_admin'){ ?>
                     <option value="admin">Admin</option>
                     <option value="super_admin">Super Admin</option>
                 <?php } ?>

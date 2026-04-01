@@ -21,34 +21,28 @@ if (isset($_POST['login'])) {
         else if ($password === $user['password']) {
 
             // Set sessions
-            $_SESSION['user_id'] = $user['user_id'];
-            $_SESSION['role'] = $user['role'];
-
-            // Redirect based on role
-            if ($user['role'] == 'super_admin') {
-                $_SESSION['admin_name'] = $user['name'];
-                header("Location: super_admin_dashboard.php");
-                exit();
+            $_SESSION['user'] = $user; 
+            // Redirect based on role 
+            if ($user['role'] == 'super_admin') { 
+                header("Location: super_admin_dashboard.php"); 
+                exit(); 
+                
             } 
-            else if ($user['role'] == 'admin') {
-                $_SESSION['admin_name'] = $user['name'];
-                header("Location: admin_dashboard.php");
-                exit();
+            else if ($user['role'] == 'admin') { 
+                header("Location: admin_dashboard.php"); 
+                exit(); 
             } 
-            else {
-                // Optional: redirect normal users if needed
-                header("Location: user_dashboard.php");
-                exit();
-            }
-
-        } else {
-            echo "<script>alert('Wrong password');</script>";
-        }
-
-    } else {
-        echo "<script>alert('User not found');</script>";
+            else { 
+                header("Location: user_dashboard.php"); 
+                exit(); 
+            } 
+            } else { 
+                echo "<script>alert('Wrong password');</script>"; 
+            } 
+        } else { 
+            echo "<script>alert('User not found');</script>"; 
+        } 
     }
-}
 ?>
 
 <!DOCTYPE html>
