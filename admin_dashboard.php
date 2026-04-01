@@ -1,13 +1,20 @@
 <?php
-session_start(); 
+session_start();
 
-//if(!isset($_SESSION['admin_name'])){
- //   header("Location: login.php");
-  //  exit();
-//}
+if(!isset($_SESSION['user'])){
+    header("Location: login.php");
+    exit();
+}
 
-$admin_name = $_SESSION['admin_name'];
+$role = $_SESSION['user']['role'];
 
+// Only admin & super admin allowed
+if($role != 'admin' && $role != 'super_admin'){
+    header("Location: user_dashboard.php");
+    exit();
+}
+
+$admin_name = $_SESSION['user']['name'];
 include 'includes/database.php';
 ?>
 
@@ -47,7 +54,7 @@ include 'includes/database.php';
         <p class="home-text">Manage books, track borrow requests, and oversee library users.</p>
         <a href="books.php#view_book" class="btn">View Books</a>
         <a href="#requests" class="btn">Borrow Requests</a>
-        <a href="#history" class="btn">Borrow History</a>
+        <a href="#user_requests" class="btn">User Requests</a>
     </div>
 </section>
 
