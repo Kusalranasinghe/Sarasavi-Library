@@ -57,8 +57,8 @@ if (!in_array($role, ['admin', 'super_admin'])) {
                 </tr>
             </thead>
             <tbody>
-            <?php
-            $query = "SELECT * FROM users WHERE status='approved' AND role IN ('user','admin','super_admin')";
+                        <?php
+            $query = "SELECT * FROM users WHERE status='approved'";
             $result = mysqli_query($conn, $query);
 
             while($user = mysqli_fetch_assoc($result)){
@@ -88,7 +88,18 @@ if(isset($_GET['user_id'])){
     $result = mysqli_query($conn, $query);
 
     if($user = mysqli_fetch_assoc($result)){
-        $readonly = ($user['role'] != 'user'); // Admin / Super Admin are readonly
+        // Only protect super_admin
+        $current_role = $_SESSION['user']['role'];
+
+// Admin restrictions
+if($current_role == 'admin'){
+    $readonly = ($user['role'] != 'user'); 
+}
+
+// Super Admin restrictions
+elseif($current_role == 'super_admin'){
+    $readonly = ($user['role'] == 'super_admin'); 
+}
 ?>
 <div class="book-card-overlay">
     <div class="book-card">
@@ -112,7 +123,7 @@ if(isset($_GET['user_id'])){
                onclick="return confirm('Delete this user?');">Delete</a>
         </div>
         <?php } else { ?>
-        <p class="readonly-note">Admin and Super Admin info cannot be changed.</p>
+        <p class="readonly-note">Super Admin cannot be modified.</p>
         <?php } ?>
     </div>
 </div>
@@ -137,17 +148,26 @@ if(isset($_GET['user_id'])){
             $role_post = mysqli_real_escape_string($conn, $_POST['role']);
             $password = mysqli_real_escape_string($conn, $_POST['password']);
 
-            // Only super_admin can create admin or super_admin
-            if(in_array($role_post, ['admin','super_admin']) && $_SESSION['user']['role'] != 'super_admin'){
-                echo "<p class='error-msg'>Only Super Admin can create Admin or Super Admin.</p>";
-            } else {
+            $current_role = $_SESSION['user']['role'];
+
+            // Admin restriction
+            if($current_role == 'admin' && $role_post != 'user'){
+                echo "<p class='error-msg'>Admin can only create Users.</p>";
+            }
+
+            // Super Admin restriction
+            elseif($current_role == 'super_admin' && $role_post == 'super_admin'){
+                echo "<p class='error-msg'>Cannot create another Super Admin.</p>";
+            }
+
+            else {
                 $insert = "INSERT INTO users (name,email,phone,nic,address,role,password,created_at,updated_at,status)
                            VALUES ('$name','$email','$phone','$nic','$address','$role_post','$password',NOW(),NOW(),'approved')";
 
                 if(mysqli_query($conn, $insert)){
                     echo "<p class='success-msg'>User added successfully!</p>";
                 } else {
-                    echo "<p class='error-msg'>Failed to add user: " . mysqli_error($conn) . "</p>";
+                    echo "<p class='error-msg'>Failed: " . mysqli_error($conn) . "</p>";
                 }
             }
         }
@@ -164,7 +184,6 @@ if(isset($_GET['user_id'])){
                 <option value="user">User</option>
                 <?php if($_SESSION['user']['role'] == 'super_admin'){ ?>
                     <option value="admin">Admin</option>
-                    <option value="super_admin">Super Admin</option>
                 <?php } ?>
             </select>
 

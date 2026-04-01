@@ -37,7 +37,7 @@ include 'includes/database.php';
         <a href="#user_requests">User Requests</a>
         <a href="#requests">Borrow Requests</a>
         <a href="#user_history">User History</a>
-        <a href="#history">History</a>
+        <a href="#history">Borrow History</a>
         <a href="books.php">Books</a>
         <a href="users.php">Users</a>  
         <a href="#footer">Contact Us</a>

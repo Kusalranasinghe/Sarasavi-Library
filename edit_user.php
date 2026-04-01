@@ -1,5 +1,21 @@
 <?php
+session_start(); // <<<< MUST start session
+
 include 'includes/database.php';
+
+// Check login
+if(!isset($_SESSION['user'])){
+    header("Location: login.php");
+    exit;
+}
+
+$current_role = $_SESSION['user']['role'];
+
+// Only admin & super_admin can access
+if(!in_array($current_role, ['admin','super_admin'])){
+    header("Location: user_dashboard.php");
+    exit;
+}
 
 // Check if user_id exists
 if(!isset($_GET['user_id'])){
@@ -16,12 +32,30 @@ if(!$user){
     exit;
 }
 
-// Prevent editing admins or super_admins by normal users
-if($user['role'] != 'user'){
-    echo "<script>alert('Admin and Super Admin cannot be edited!'); window.location='users.php';</script>";
+$target_role = $user['role'];
+
+/*
+RULES:
+Admin:
+  - can edit ONLY users
+Super Admin:
+  - can edit users & admins
+  - cannot edit super_admin
+*/
+
+// Admin restriction
+if($current_role == 'admin' && $target_role != 'user'){
+    echo "<script>alert('Admin can only edit Users!'); window.location='users.php';</script>";
     exit;
 }
 
+// Super Admin restriction
+if($current_role == 'super_admin' && $target_role == 'super_admin'){
+    echo "<script>alert('Cannot edit another Super Admin!'); window.location='users.php';</script>";
+    exit;
+}
+
+// Update user
 if(isset($_POST['update_user'])){
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
